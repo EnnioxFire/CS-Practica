@@ -1,6 +1,7 @@
 import java.io.*;
 import javax.crypto.*;
 import java.security.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.crypto.spec.IvParameterSpec;
@@ -11,13 +12,37 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Desencriptar {
 
-	public static void main(String[] args) {
+	private static ArrayList<String> leeFicheros(){
+		ArrayList<String> ret;
+		try{
+			BufferedReader reader =new BufferedReader(new FileReader("Ficheros.txt"));
+			String linea=reader.readLine();
+			ret = new ArrayList<String>();
+			while(linea!=null){
+				ret.add(linea);
+				linea=reader.readLine();
+			}
+			reader.close();
+		}catch(Exception e){
+			ret= null;
+		}
 		
+		return ret;
+	}
+
+	private static String leeKey(String fichero){
+		return "AAAAAAAAAAAAAAAA";
+	}
+
+
+	private static void DescifraFichero(String fichero){
+		String cifradoNombre = fichero.split("\\.")[0];
+		cifradoNombre+=".troleado";
+		File outpt = new File(fichero);
+		File inpt = new File(cifradoNombre);
 		
-		final String key = "AAAAAAAAAAAAAAAA";
-		File outpt = new File("bungee.mp3");
-		File inpt = new File("troleado");
-		
+		//falta leer y descifrar key
+		String key=leeKey(fichero);
 		//aqui se haria la encriptacion
 		try{
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -30,7 +55,7 @@ public class Desencriptar {
 			inputStream.read(inputBytes);
 			byte[] ivbytes = Arrays.copyOfRange(inputBytes,0,16);
 			cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(ivbytes));
-			System.out.print("el iv es tiene longitud " + ivbytes.length + " y es:");
+			//System.out.print("el iv es tiene longitud " + ivbytes.length + " y es:");
 			for(int i = 0;i<16;i++){
 				System.out.print(ivbytes[i]);
 			}
@@ -39,8 +64,18 @@ public class Desencriptar {
 			outputStream.write(outputBytes);
 			inputStream.close();
 			outputStream.close();
+			System.out.print(System.lineSeparator() + "EXITO AL DESCIFRAR! : DESCIFRADO: " + fichero);
 		}catch(Exception e){
-			System.out.print(System.lineSeparator() + "ERROR DESENCRIPTAR : " + e.getMessage());
+			System.out.print(System.lineSeparator() + "ERROR DESENCRIPTAR : " + e.getMessage() + " ----- NO SE PUDO DESENCRIPTAR " + fichero);
+		}
+	}
+
+	public static void main(String[] args) {
+		
+		ArrayList<String> ficheros = leeFicheros();
+		//System.out.println(ficheros.toString());
+		for(int i = 0;i<ficheros.size();i++){
+			DescifraFichero(ficheros.get(i));
 		}
 	}
 
