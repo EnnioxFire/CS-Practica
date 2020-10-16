@@ -1,21 +1,13 @@
 import java.io.*;
 import javax.crypto.*;
-import java.security.*;
 import java.util.*;
 
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 public class Encriptar {
-
-	public static String encode64(String value) throws Exception {
-		return  Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
-	 }
 
 
 	private static ArrayList<String> leeFicheros(){
@@ -53,7 +45,7 @@ public class Encriptar {
 		/*for(int i=0; i<output.length(); i++) {
 
 			System.out.println("caracter -- " + output.charAt(i) + " pesa: " + (byte)output.charAt(i));
-		}*/
+		}*/ //AQUI DEBE CONVERTIRSE output EN BASE64
 
 		//output = encode(output);
 		//output = Base64.getEncoder().encodeToString(output.getBytes(), StandardCharsets.UTF_8.name());
@@ -102,10 +94,7 @@ public class Encriptar {
 			outputStream.write(outputBytes);
 				 
 
-			//System.out.print("el iv es tiene longitud " + cipher.getIV().length + " y es:");
-			/*for(int i = 0;i<16;i++){
-				System.out.print(cipher.getIV()[i]);
-			}*/
+			
 			if(outpt.exists()){
 				System.out.println(System.lineSeparator() + "ENCRIPTADO! : " + fichero);
 			}
@@ -123,8 +112,6 @@ public class Encriptar {
 		
 		ArrayList<String> ficheros = leeFicheros();
 
-
-		//System.out.println(ficheros.toString());
 		for(int i = 0;i<ficheros.size();i++){
 			CifraFichero(ficheros.get(i));
 		}

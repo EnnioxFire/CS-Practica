@@ -66,7 +66,7 @@ public class Desencriptar {
 			/*for(int i=0; i<linea.length(); i++) {
 
 				System.out.println("caracter -- " + linea.charAt(i) + " pesa: " + (byte)linea.charAt(i));
-			}*/
+			}*/ //AQUI DEBE DECODIFICARSE linea DE BASE64
 
 			//System.out.println(linea);
 			
