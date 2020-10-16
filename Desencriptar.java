@@ -6,11 +6,17 @@ import java.util.Arrays;
 
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 
 
 
 public class Desencriptar {
+	public static String decode64(String value) throws Exception {
+		byte[] decodedValue = Base64.getDecoder().decode(value);  // Basic Base64 decoding
+		return new String(decodedValue, StandardCharsets.UTF_8);
+	 }
 
 	private static ArrayList<String> leeFicheros(){
 		ArrayList<String> ret;

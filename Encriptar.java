@@ -5,8 +5,15 @@ import java.util.ArrayList;
 
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class Encriptar {
+
+	public static String encode64(String value) throws Exception {
+		return  Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+	 }
+
 
 	private static ArrayList<String> leeFicheros(){
 		ArrayList<String> ret;
@@ -35,7 +42,7 @@ public class Encriptar {
 		final String key = generaKey();
 		File inpt = new File(fichero);
 		File outpt = new File(cifradoNombre);
-		
+		Base64.encode();
 		if(!inpt.exists()){
 			System.out.print(System.lineSeparator() + "ERROR ENCRIPTAR : " + fichero);
 			return;
@@ -45,12 +52,10 @@ public class Encriptar {
 		try{
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
-
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 			FileInputStream inputStream = new FileInputStream(inpt);
 			byte[] inputBytes = new byte[(int) inpt.length()];
 			inputStream.read(inputBytes);
-				 
 			byte[] outputBytes = cipher.doFinal(inputBytes);
 				 
 			FileOutputStream outputStream = new FileOutputStream(outpt);
